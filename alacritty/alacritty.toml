@@ -1,0 +1,60 @@
+[general]
+live_config_reload = true
+working_directory = 'None'
+
+[env]
+
+[window]
+padding = { x=2, y=2 }
+dynamic_padding = true
+opacity = 0.5
+blur = true
+
+[scrolling]
+history = 10000
+multiplier = 1
+
+[font]
+normal = { family = '0xProto Nerd Font Mono', style = 'Regular' }
+bold = { family = '0xProto Nerd Font Mono', style = 'Bold' }
+italic = { family = '0xProto Nerd Font Mono', style = 'Italic' }
+bold_italic = { family = '0xProto Nerd Font Mono', style = 'Bold Italic' }
+offset = { x=0, y=0 }
+size = 10.0
+
+[colors]
+[colors.primary]
+
+[colors.normal]
+black = "#181818"
+cyan = "#1acaca"
+
+[colors.bright]
+black = "#3a3a3a"
+cyan = "#1fb8b8"
+
+[cursor]
+style.shape = 'Block'
+style.blinking = 'On'
+vi_mode_style = { shape = 'Block', blinking = 'On' }
+unfocused_hollow = true
+
+[terminal]
+shell.program = 'zsh'
+shell.args = ['-l']
+
+[keyboard]
+bindings = [
+{ key = "T", mods = "Control|Shift", action = "CreateNewWindow" },
+{ key = "V", mods = "Control|Shift", action = "Paste" },
+{ key = "C", mods = "Control|Shift", action = "Copy" },
+{ key = "K", mods = "Control|Shift", action = "ClearHistory" },
+{ key = "Plus", mods = "Control", action = "IncreaseFontSize" },
+{ key = "Minus", mods = "Control", action = "DecreaseFontSize" },
+{ key = "0", mods = "Control", action = "ResetFontSize" },
+{ key = "PageUp", mods = "Shift", action = "ScrollPageUp" },
+{ key = "PageDown", mods = "Shift", action = "ScrollPageDown" },
+{ key = "Home", mods = "Shift", action = "ScrollToTop" },
+{ key = "End", mods = "Shift", action = "ScrollToBottom" },
+{ key = "D", mods = "Control|Shift", action = "Quit" },
+]
