@@ -5,21 +5,21 @@ working_directory = 'None'
 [env]
 
 [window]
-padding = { x=2, y=2 }
+padding = { x = 2, y = 2 }
 dynamic_padding = true
 opacity = 0.5
 blur = true
 
 [scrolling]
-history = 10000
-multiplier = 1
+history = 100000
+multiplier = 3
 
 [font]
 normal = { family = '0xProto Nerd Font Mono', style = 'Regular' }
 bold = { family = '0xProto Nerd Font Mono', style = 'Bold' }
 italic = { family = '0xProto Nerd Font Mono', style = 'Italic' }
 bold_italic = { family = '0xProto Nerd Font Mono', style = 'Bold Italic' }
-offset = { x=0, y=0 }
+offset = { x = 0, y = 0 }
 size = 10.0
 
 [colors]
@@ -41,20 +41,27 @@ unfocused_hollow = true
 
 [terminal]
 shell.program = 'zsh'
-shell.args = ['-l']
+shell.args = [
+  '-l',
+  '-c',
+  'tmux new-session -s "$(i=0; while tmux has-session -t $i 2>/dev/null; do ((i++)); done; echo $i)"',
+]
 
 [keyboard]
 bindings = [
-{ key = "T", mods = "Control|Shift", action = "CreateNewWindow" },
-{ key = "V", mods = "Control|Shift", action = "Paste" },
-{ key = "C", mods = "Control|Shift", action = "Copy" },
-{ key = "K", mods = "Control|Shift", action = "ClearHistory" },
-{ key = "Plus", mods = "Control", action = "IncreaseFontSize" },
-{ key = "Minus", mods = "Control", action = "DecreaseFontSize" },
-{ key = "0", mods = "Control", action = "ResetFontSize" },
-{ key = "PageUp", mods = "Shift", action = "ScrollPageUp" },
-{ key = "PageDown", mods = "Shift", action = "ScrollPageDown" },
-{ key = "Home", mods = "Shift", action = "ScrollToTop" },
-{ key = "End", mods = "Shift", action = "ScrollToBottom" },
-{ key = "D", mods = "Control|Shift", action = "Quit" },
+  { key = "V", mods = "Control|Shift", action = "Paste" },
+  { key = "C", mods = "Control|Shift", action = "Copy" },
+  { key = "K", mods = "Control|Shift", action = "ClearHistory" },
+  { key = "Plus", mods = "Control", action = "IncreaseFontSize" },
+  { key = "Minus", mods = "Control", action = "DecreaseFontSize" },
+  { key = "0", mods = "Control", action = "ResetFontSize" },
+  { key = "PageUp", mods = "Shift", action = "ScrollPageUp" },
+  { key = "PageDown", mods = "Shift", action = "ScrollPageDown" },
+  { key = "Home", mods = "Shift", action = "ScrollToTop" },
+  { key = "End", mods = "Shift", action = "ScrollToBottom" },
+  { key = "D", mods = "Control|Shift", action = "Quit" },
+  #{ key = "T", mods = "Control|Shift", chars="\x02c" }, # Ctrl+b c (new tmux window)
+  #{ key = "W", mods = "Control|Shift", chars="\x02&" }, # Ctrl+b d (close tmux window)
+  #{ key = "Tab", mods = "Control", chars="\x02n" }, # Ctrl+tab (next tmux window)
+  #{ key = "Tab", mods = "Control|Shift", chars="\x02p" }, # Ctrl+shift+tab (previous tmux window)
 ]
