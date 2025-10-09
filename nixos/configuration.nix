@@ -9,21 +9,45 @@
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       "${builtins.fetchTarball "https://github.com/nix-community/disko/archive/master.tar.gz"}/module.nix"
-      ./disk-config.nix
+      ./disk-config.nix      
     ];
 
   # Bootloader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+  boot = {
+    loader.systemd-boot.enable = true;
+    loader.efi.canTouchEfiVariables = true;
+    kernelPackages = [ pkgs.linuxPackages_latest , pkgs.linuxPackages_lts ];
+    initrd.kernelModules = [ "btrfs" ];
+    kernelParams = [ "rw" "root=/dev/vg1/lv0" "rootflags=subvol=@" "intel_iommu=on" "iommu=pt" "resume=/dev/vg1/swp0" ];
 
-  # Use latest kernel.
-  boot.kernelPackages = pkgs.linuxPackages_latest;
-
-  networking.hostName = "silverhand"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+  };
 
   # Enable networking
-  networking.networkmanager.enable = true;
+  networking = {
+    networkmanager.enable = true;
+    hostName = "silverhand"; # define hostname.
+
+    wireless = {
+      enable = true; # enable wireless support via wpa_supplicant
+    };
+
+    interfaces = {
+      enp8s0 = {
+        ipv4.addresses = [{
+          address = "192.168.0.2";
+          prefixLength = 24;
+          nameservers = [ "194.242.2.3" "192.168.0.1" ];
+          defaultGateway = "192.168.0.1";
+        }];
+      };
+    };
+
+    firewall = {
+      enable = true;
+      allowedTCPPorts = [ 22 80 443 ];
+      trustedInterfaces = [ "lo" ];
+    };
+  };
 
   # Set your time zone.
   time.timeZone = "Canada/Eastern";
@@ -31,15 +55,29 @@
   # Select internationalisation properties.
   i18n.defaultLocale = "en_CA.UTF-8";
 
-  # Enable the X11 windowing system.
+  hardware = {
+    enableAllFirmware = true;
+    graphics = {
+      enable = true;
+      enable32Bit = true;
+      extraPkgs = with pkgs; [ "intel-media-driver" "intel-vaapi-driver" ];
+    };
+  };
+
   services = {
     xserver = {
       enable = true;
+      autorun = false;
       xkb.layout = "us";
       xkb.variant = "";
+      videoDrivers = [ "modesetting" ];
+      desktopManager.plasma6.enable = true;
+      displayManager.sddm.enable = true;
     };
-    wayland = {
+
+    openssh = {
       enable = true;
+      permitRootLogin = "no";
     };
   
     # Enable the KDE Plasma Desktop Environment.
@@ -49,11 +87,10 @@
     # enable cups to print shit
     printing.enable = true;
     
-    # Enable virtualization
-
     # enable sound with pipewire
     pulseaudio.enable = false;
     rtkit.enable = true;
+    
     pipewire = {
       enable = true;
       alsa.enable = true;
@@ -68,7 +105,12 @@
   users.users.j = {
     isNormalUser = true;
     description = "jacob";
-    extraGroups = [ "networkmanager" "wheel" "libvirtd" ];
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+      "libvirtd"
+    ];
+
     initialHashedPassword = "$y$j9T$.TwhpvoNYVWYHSEjokQW/1$N/yMwStCdTMUkkjUVU2OKXk/I4h4LBAAGK0993EeRe/";
     packages = with pkgs; [
     ];
@@ -83,6 +125,25 @@
   programs = {
     firefox = {
       enable = true;
+    };
+
+    zsh.ohMyZsh = {
+      enable = true;
+      theme = "af-magic";
+      
+      plugins = [
+        "git"
+        "sudo"
+        "man"
+        "python"
+      ];
+      
+      enableCompletion = true;
+      enableSyntaxHighlighting = true;
+      customPkgs = [
+        pkgs.zsh-syntax-highlighting
+        pkgs.nix-zsh-completions
+      ];
     };
   };
 
