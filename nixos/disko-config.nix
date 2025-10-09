@@ -3,7 +3,7 @@
     disk = {
       main = {
         type = "disk";
-        device = "/dev/sda"; # Change this to your actual disk device
+        device = "/dev/disk/by-id/nvme-SAMSUNG_MZVL21T0HCLR-00BL2_S64NNX0WB10141"; # Change this to your actual disk device
         content = {
           type = "gpt";
           partitions = {
