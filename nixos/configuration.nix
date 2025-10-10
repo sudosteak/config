@@ -134,6 +134,17 @@
 
   # Install firefox.
   programs = {
+    kitty = {
+      enable = true;
+      settings = {
+        fontSize = 12.0;
+        shell = pkgs.zsh;
+        enabbleShellIntegration = true;
+        enable_audio_bell = "no";
+        sync_to_monitor = "yes";
+      };
+    };
+
     git = {
       enable = true;
       userName = "sudosteak";
