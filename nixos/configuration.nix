@@ -17,9 +17,20 @@
     loader.systemd-boot.enable = true;
     loader.efi.canTouchEfiVariables = true;
     kernelPackages = [ pkgs.linuxPackages_latest , pkgs.linuxPackages_lts ];
-    initrd.kernelModules = [ "btrfs" ];
+    initrd = {
+      kernelModules = [ "btrfs" "exfat" "usb_storage" "uas" ];
+      supportedFilesystems = [ "btrfs" "vfat" "exfat" ];
+      luks.devices = {
+        crypt0 = {
+          device = "/dev/disk/by-uuid/";
+          preLVM = true;
+          allowDiscards = true;
+          keyFile = "/dev/disk/by-uuid/6CF7-6192:/.keys/lv0.key";
+        };
+        crypttabExtraOpts = [ "keyfile-timeout=5s" ];
+      };
+    };
     kernelParams = [ "rw" "root=/dev/vg1/lv0" "rootflags=subvol=@" "intel_iommu=on" "iommu=pt" "resume=/dev/vg1/swp0" ];
-
   };
 
   # Enable networking
@@ -123,9 +134,15 @@
 
   # Install firefox.
   programs = {
+    git = {
+      enable = true;
+      userName = "sudosteak";
+      userEmail = "github.failing562@passmail.net";
+    };
+
     steam = {
       enable = true;
-    }
+    };
 
     firefox = {
       enable = true;
@@ -159,7 +176,6 @@
   environment.systemPackages = with pkgs; [
     wget
     neovim
-    git
     curl
     htop
     vim
