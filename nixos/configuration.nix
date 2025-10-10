@@ -123,6 +123,10 @@
 
   # Install firefox.
   programs = {
+    steam = {
+      enable = true;
+    }
+
     firefox = {
       enable = true;
     };

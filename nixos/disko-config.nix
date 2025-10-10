@@ -3,7 +3,7 @@
     disk = {
       main = {
         type = "disk";
-        device = "/dev/disk/by-id/nvme-SAMSUNG_MZVL21T0HCLR-00BL2_S64NNX0WB10141"; # Change this to your actual disk device
+        device = "/dev/sda"; # Change this to your actual disk device
         content = {
           type = "gpt";
           partitions = {
@@ -20,11 +20,20 @@
                 ];
               };
             };
-            lvm = {
+            luks = {
               size = "100%";
               content = {
-                type = "lvm_pv";
-                vg = "vg1";
+                type = "luks";
+                name = "crypt";
+                settings = {
+                  allowDiscards = true;
+                  
+                };
+                initrdUnlock = true;
+                content = {
+                  type = "lvm_pv";
+                  vg = "vg1";
+                };
               };
             };
           };
